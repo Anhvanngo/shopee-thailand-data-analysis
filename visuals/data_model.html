@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Data Warehouse Model (Beautiful BI)</title>
+    <script type="module">
+        import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: "base",
+            themeVariables: {
+                primaryColor: "#e0f7fa",
+                primaryBorderColor: "#00acc1",
+                tertiaryColor: "#b2dfdb",
+            }
+        });
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 40px 20px;
+            background: #fafafa;
+            color: #333;
+        }
+        h1 {
+            color: #00796b;
+            text-align: center;
+            font-weight: 600;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .mermaid {
+            background: #ffffff;
+            padding: 25px 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            border: 1px solid #ddd;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data Warehouse Model (Fact + Dimension)</h1>
+    <p class="subtitle">Mô hình BI với quan hệ 1:N rõ ràng giữa Fact và Dimension</p>
 
+    <div class="mermaid">
+        erDiagram
+            dim_date {
+                int date_id PK
+                int year
+                int month
+                int quarter
+                int day
+                string weekday
+            }
+            dim_product {
+                int product_id PK
+                int seller_id FK
+                string category
+                string product_name
+                float maintenance_rate
+                float commission_rate
+                float weight
+                datetime created_at
+            }
+            dim_customer {
+                int customer_id PK
+                string first_name
+                string last_name
+                string gender
+                date dob
+                datetime registration_date
+                string phone
+                string email
+                string province
+                string city
+            }
+            dim_seller {
+                int seller_id PK
+                string shop_name
+                string seller_type
+                string email
+                string contact_phone
+                string province
+                string city
+                datetime join_date
+                string status
+                string fbs_standard
+                bool use_logistics
+                string warehouse
+            }
+            dim_campaign {
+                int campaign_id PK
+                string campaign_name
+                datetime start_date
+                datetime end_date
+                string campaign_type
+            }
+            dim_shipment {
+                int order_item_id PK
+                string courier_name
+                datetime shipped_date
+                datetime delivery_date
+                string delivery_status
+                int actual_delivery_days
+            }
+
+            fact_order_items {
+                int order_item_id PK
+                int order_id
+                int product_id FK
+                int customer_id FK
+                int seller_id FK
+                int campaign_id FK
+                int product_campaign_id
+                int date_id FK
+                int quantity
+                float unit_price
+                float unit_price_after_discount
+                float discount_percent
+                float line_total
+                float commission_amount
+                float maintenance_amount
+                float shipping_fee_item
+                bool is_campaign
+                string item_status
+                datetime estimated_delivery_start
+                datetime estimated_delivery_end
+            }
+
+            fact_order_items ||--o{ dim_date : "date_id"
+            fact_order_items ||--o{ dim_product : "product_id"
+            fact_order_items ||--o{ dim_customer : "customer_id"
+            fact_order_items ||--o{ dim_seller : "seller_id"
+            fact_order_items ||--o{ dim_campaign : "campaign_id"
+            fact_order_items ||--|| dim_shipment : "order_item_id"
+    </div>
+
+    <div class="footer">
+        © 2026 Data Warehouse Model – Displayed with Mermaid.js
+    </div>
+</body>
+</html>
