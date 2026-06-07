@@ -18,6 +18,8 @@ https://www.kaggle.com/datasets/hninshwezinhlaing/shopee-th-customer-journey-and
 - Matplotlib
 - Seaborn
 - Jupyter Notebook
+- Tableau
+- html
 
 ## Project Structure
 data/        -> datasets  
